@@ -102,6 +102,17 @@ class programo(Tk):
                 else:
                     return len(identificadores)
 
+            def metricaUsuario(metrica, inicio, fin, periodo):
+            #Extrae todos los posts en el periodo indicado
+            identificadores = []
+            todoslosposts = graph.request('/'+ instaid + '/insights?metric=' + metrica + 
+                '&period=' + periodo + '&since=' + inicio + '&until=' + fin)
+            datostodos = todoslosposts['data']
+            print(datostodos)
+            for x in datostodos[0]['values']:
+                identificadores.append(x['value'])
+            return identificadores
+
             #Extrae valor de la métrica de cada uno de los posts del periodo seleccionado
             def metricaUnica(metrica, identificadores, una_o_dos):
                 top = []
@@ -169,7 +180,7 @@ class programo(Tk):
             pageid = pageobjeto['id']
             instaid = getinstaID(pageid)
 
-            #Rango temporal 2 para testear
+            #Rango temporal
             diainicio = int(dia_inicio.get())
             mesinicio = mesNumero(mes_inicio.get())
             anhoinicio = int(anho_inicio.get())
@@ -179,9 +190,9 @@ class programo(Tk):
             inicito = dt.datetime(anhoinicio, mesinicio, diainicio)
             finito = dt.datetime(anhofin, mesfin, diafin)
 
-            #Conversión a Timestamp string
-            #inicio2 = str(int(time.mktime(inicito.timetuple()))) 
-            #fin2 = str(int(time.mktime(finito.timetuple())))
+            Conversión a Timestamp string
+            iniciounix = str(int(time.mktime(inicito.timetuple()))) 
+            finunix = str(int(time.mktime(finito.timetuple())))
 
             #Definir periodo analizado en el informe
             if int(inicito.year) == int(finito.year):
@@ -207,6 +218,9 @@ class programo(Tk):
             identificadores = acordePeriodo(identificadores, inicito, finito)
 
             totaldeposts = len(identificadores)
+
+            seguidores = metricaUsuario('follower_count', iniciounix, finunix, 'day')
+            seguidorestotal = metricaSumada(seguidores)
 
             valoresimpresiones = metricaUnica('impressions', identificadores, False)
             impresionespromedio = metricaAgregada(valoresimpresiones)
@@ -241,6 +255,9 @@ class programo(Tk):
             pgram = document.add_paragraph()
             pgram.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
             pgram.add_run('Instagram').bold = True
+
+            pgram0 = document.add_paragraph()
+            pgram0.add_run('{0} nuevos seguidores.'.format(seguidorestotal))
 
             pgram1 = document.add_paragraph()
             pgram1.add_run('{0} posts realizados.'.format(totaldeposts))
