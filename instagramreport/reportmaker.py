@@ -103,15 +103,14 @@ class programo(Tk):
                     return len(identificadores)
 
             def metricaUsuario(metrica, inicio, fin, periodo):
-            #Extrae todos los posts en el periodo indicado
-            identificadores = []
-            todoslosposts = graph.request('/'+ instaid + '/insights?metric=' + metrica + 
-                '&period=' + periodo + '&since=' + inicio + '&until=' + fin)
-            datostodos = todoslosposts['data']
-            print(datostodos)
-            for x in datostodos[0]['values']:
-                identificadores.append(x['value'])
-            return identificadores
+                #Extrae todos los posts en el periodo indicado
+                identificadores = []
+                todoslosposts = graph.request('/'+ instaid + '/insights?metric=' + metrica + 
+                    '&period=' + periodo + '&since=' + inicio + '&until=' + fin)
+                datostodos = todoslosposts['data']
+                for x in datostodos[0]['values']:
+                    identificadores.append(x['value'])
+                return identificadores
 
             #Extrae valor de la métrica de cada uno de los posts del periodo seleccionado
             def metricaUnica(metrica, identificadores, una_o_dos):
@@ -190,7 +189,7 @@ class programo(Tk):
             inicito = dt.datetime(anhoinicio, mesinicio, diainicio)
             finito = dt.datetime(anhofin, mesfin, diafin)
 
-            Conversión a Timestamp string
+            #iConversión a Timestamp string
             iniciounix = str(int(time.mktime(inicito.timetuple()))) 
             finunix = str(int(time.mktime(finito.timetuple())))
 
