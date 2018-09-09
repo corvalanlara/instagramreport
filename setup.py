@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name = "instagramreport",
-    version = "0.1.0",
+    version = "0.1.2",
     author = "Daniel Corvalán",
     author_email = "corvalanlara@protonmail.com",
     description = "App for creating an Instagram Business account performance report (in spanish)",

@@ -134,13 +134,18 @@ class programo(Tk):
             def metricaUnica(metrica, identificadores, una_o_dos):
                 top = []
                 top_metrica = []
+
                 for i in identificadores:
-                    metricapost = graph.request('/'+ i +'/insights?metric='+ metrica)
-                    datospost = metricapost['data']
-                    for x in datospost:
-                        u = x['values'][0]['value']
-                        top.append(u)
-                        top_metrica.append((i, u))
+                    try:
+                        metricapost = graph.request('/'+ i +'/insights?metric='+ metrica)
+                        datospost = metricapost['data']
+                        for x in datospost:
+                            u = x['values'][0]['value']
+                            top.append(u)
+                            top_metrica.append((i, u))
+                    except:
+                        pass
+
                 if una_o_dos is True:
                     return top, top_metrica
                 else:
@@ -210,21 +215,19 @@ class programo(Tk):
                 diccionario = [x for x in data]
                 
                 if len(diccionario) is 1:
-                    if len(diccionario[0]) is 12:
+                    if len(diccionario[0]) is 11:
                         facedic = diccionario[0]
                         
-                    elif len(diccionario[0]) is 11:
+                    elif len(diccionario[0]) is 10:
                         instadic = diccionario[0]
                         
                 elif len(diccionario) is 2:
-                    if len(diccionario[0]) is 12:
+                    if len(diccionario[0]) > len(diccionario[1]):
                         facedic = diccionario[0]
-                        instadic = diccionario[1]
-                        
-                    elif len(diccionario[0]) is 11:
+                        instadic = diccionario[1]   
+                    else:
                         instadic = diccionario[0]
                         facedic = diccionario[1]
-                        
 
                 #Nombres de los archivos guardados
                 desktop = os.getcwd()
@@ -448,9 +451,9 @@ class programo(Tk):
                 'engagementpop' : engagementpop, 'reachpop' : reachpop, 'savedpop' : savedpop, 
                 'linkpost' : linkpost}
 
-                if 'vistas_video' in diccionariopop:
-                    vistaspop = diccionariopop['vistas_video']
-                    todoslosdatos['vistaspop'] = vistaspop
+                #if 'vistas_video' in diccionariopop:
+                #    vistaspop = diccionariopop['vistas_video']
+                #    todoslosdatos['vistaspop'] = vistaspop
 
                 if insta_or_face is facebook:
                     nuevolikes = seguidores[-1] - seguidores[0]
